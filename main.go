@@ -85,6 +85,7 @@ func ResolveTxt(host string, nameserver []string) string {
 
 	for {
 		txt := <-ch
+		// TODO 验证签名和时间
 		//if len(txt) > 0 || total>=len(nameserver) {
 		if total >= len(nameserver) {
 			return txt
