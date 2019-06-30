@@ -86,9 +86,9 @@ var Ipv4 = []string {
 
 
 var Ipv6 = []string{
-	"2a02:6b8::feed:0ff/53", //yandex
-	"2001:4860:4860::8888/53", // Google
-	"2620:fe::fe/53", // IBM
+	"[2a02:6b8::feed:0ff]:53", //yandex
+	"[2001:4860:4860::8888]:53", // Google
+	"[2620:fe::fe]:53", // IBM
 }
 
 
