@@ -1,16 +1,34 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net"
 
 	"github.com/u6du/ex"
 )
 
-func main() {
-	dnsServer := "8.8.8.8"
-	c, err := net.Dial("udp", dnsServer)
-	ex.Panic(err)
 
-	fmt.Println("vim-go")
+func LookupTXT(nameserver string){
+	resolve := &net.Resolver{
+		PreferGo: true,
+		Dial: func(context context.Context, _, address string) (net.Conn, error) {
+			var dialer net.Dialer
+
+			conn, err := dialer.DialContext(context, "udp", nameserver)
+			if err != nil {
+				return nil, err
+			}
+
+			return conn, nil
+		},
+	}
+	li, err := resolve.LookupTXT(context.Background(), "ip4.6du.host")
+	ex.Panic(err)
+	fmt.Println("%s", li)
+}
+
+func main() {
+	LookupTXT("8.8.8.8:53")
+	LookupTXT("[2620:fe::fe]:53")
 }
