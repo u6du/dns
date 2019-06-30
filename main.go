@@ -61,31 +61,26 @@ func LookupTXT(host,nameserver string) string{
   清华大学 TUNA 协会 IPv6 DNS 服务器
   2001:da8::666
 
-  cloudflare
-  1.1.1.1
-  2606:4700:4700::1111
-
-  yandex
-  77.88.8.8
-  2a02:6b8::feed:0ff
-
-  IBM
-  9.9.9.9
-  2620:fe::fe
-
-  Google DNS
-  8.8.8.8
-  2001:4860:4860::8888
  */
 
 var Ipv4 = []string {
+	"180.76.76.76:53", // 百度
+	"223.5.5.5:53", // 阿里云
+	"119.29.29.29:53", // dnspod
+	"1.1.1.1:53", // cloudflare
 	"77.88.8.8:53", // yandex
 	"9.9.9.9:53", // IBM
 	"8.8.8.8:53", // Google
+	"101.7.8.9:53", // cernet 的官方 DNS
 }
 
 
 var Ipv6 = []string{
+	"[2400:da00::6666]:53", // 百度
+	"[240C::6666]:53", // 下一代互联网北京研究中心
+	"[2001:dc7:1000::1]:53", // CNNIC IPv6 DNS 服务器
+	"[2001:da8::666]:53", // 清华大学 TUNA 协会 IPv6 DNS 服务器
+	"[2606:4700:4700::1111]:53", // cloudflare
 	"[2a02:6b8::feed:0ff]:53", //yandex
 	"[2001:4860:4860::8888]:53", // Google
 	"[2620:fe::fe]:53", // IBM
@@ -102,7 +97,7 @@ func ResolveTxt(host string, nameserver []string) string{
 	for i:=range nameserver{
 		go func(server string) {
 			txt := LookupTXT(host,server)
-			println("nameserver ", server, " : ", txt)
+			println("nameserver ", server, " : ", txt,"\n")
 			ch <- txt
 		}(nameserver[i])
 	}
