@@ -76,6 +76,8 @@ var Ipv4 = []string {
 
 
 var Ipv6 = []string{
+	"[2400:da00::6666]:53", // 百度
+	"[2001:da8:202:10::36]:53", // 北京邮电大学 IPv6 DNS 服务器
 	"[2001:da8::666]:53", // 清华大学 TUNA 协会 IPv6 DNS 服务器
 	"[2606:4700:4700::1111]:53", // cloudflare
 	"[2a02:6b8::feed:0ff]:53", //yandex
@@ -94,7 +96,9 @@ func ResolveTxt(host string, nameserver []string) string{
 	for i:=range nameserver{
 		go func(server string) {
 			txt := LookupTXT(host,server)
-			println("nameserver ", server, " : ", txt,"\n")
+if len(txt) == 0{
+			println("nameserver ", server, " : ", txt)
+}
 			ch <- txt
 		}(nameserver[i])
 	}
@@ -113,24 +117,22 @@ func ResolveTxt(host string, nameserver []string) string{
 
 
 func main() {
+	//host:="baidu.com"
 	host:="ip4.6du.host"
 
 	wg := sync.WaitGroup{}
 
-	run := func(nameserver []string) string{
+	var v6txt,v4txt string
+	run := func(nameserver []string, out *string){
 		wg.Add(1)
-		ch := make(chan string)
 		go func() {
-			txt:=ResolveTxt(host, nameserver)
-			ch<-txt
+			*out=ResolveTxt(host, nameserver)
 			wg.Done()
 		}()
-		txt:= <-ch
-		return txt
 	}
 
-	v6txt := run(Ipv6)
-	v4txt := run(Ipv4)
+	run(Ipv6, &v6txt)
+	run(Ipv4, &v4txt)
 
 	wg.Wait()
 	println("v4", v4txt)
