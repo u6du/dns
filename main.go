@@ -1,3 +1,5 @@
+//usr/bin/env go run "$0" "$@"; exit
+
 package main
 
 import (
@@ -25,7 +27,7 @@ func LookupTXT(nameserver string){
 	}
 	li, err := resolve.LookupTXT(context.Background(), "ip4.6du.host")
 	ex.Panic(err)
-	fmt.Println("%s", li)
+	fmt.Printf("%s", li)
 }
 
 func main() {
