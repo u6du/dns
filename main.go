@@ -27,10 +27,10 @@ func LookupTXT(nameserver string){
 	}
 	li, err := resolve.LookupTXT(context.Background(), "ip4.6du.host")
 	ex.Panic(err)
-	fmt.Printf("%s", li)
+	fmt.Printf("%s %s", nameserver, li)
 }
 
 func main() {
 	LookupTXT("8.8.8.8:53")
-	LookupTXT("[2620:fe::fe]:53")
+	LookupTXT("[2001:4860:4860::8888]:53")
 }
