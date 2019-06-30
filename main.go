@@ -9,14 +9,15 @@ import (
 	"time"
 )
 
+func LookupTXT(host, nameserver string) string {
 
-func LookupTXT(host,nameserver string) string{
 	resolve := &net.Resolver{
 		PreferGo: true,
 		Dial: func(context context.Context, _, address string) (net.Conn, error) {
 			var dialer net.Dialer
 
 			conn, err := dialer.DialContext(context, "udp", nameserver)
+
 			if err != nil {
 				return nil, err
 			}
@@ -25,10 +26,10 @@ func LookupTXT(host,nameserver string) string{
 		},
 	}
 	li, err := resolve.LookupTXT(context.Background(), host)
-	if err == nil{
+	if err == nil {
 		for i := range li {
 			txt := li[i]
-			if len(txt)>0{
+			if len(txt) > 0 {
 				return txt
 			}
 		}
@@ -38,46 +39,44 @@ func LookupTXT(host,nameserver string) string{
 
 }
 
-
-var Ipv4 = []string {
-	"180.76.76.76:53", // 百度
-	"223.5.5.5:53", // 阿里云
-	"119.29.29.29:53", // dnspod
-	"1.1.1.1:53", // cloudflare
-	"77.88.8.8:53", // yandex
-	"9.9.9.9:53", // IBM
-	"8.8.8.8:53", // Google
-	"101.7.8.9:53", // cernet 的官方 DNS
-	"208.67.222.222:53", // OPENDNS
+var Ipv4 = []string{
+	"180.76.76.76:53",    // 百度
+	"223.5.5.5:53",       // 阿里云
+	"119.29.29.29:53",    // dnspod
+	"1.0.0.1:53",         // cloudflare
+	"77.88.8.8:53",       // yandex
+	"9.9.9.9:53",         // IBM
+	"8.8.8.8:53",         // Google
+	"101.7.8.9:53",       // cernet 的官方 DNS
+	"208.67.222.222:53",  // OPENDNS
 	"114.114.114.114:53", // 114 dns
 }
 
-
 var Ipv6 = []string{
-	"[2620:0:ccc::2]:53", // OPENDNS
-	"[2400:da00::6666]:53", // 百度
-	"[2001:da8:202:10::36]:53", // 北京邮电大学 IPv6 DNS 服务器
-	"[2001:da8::666]:53", // 清华大学 TUNA 协会 IPv6 DNS 服务器
+	"[2620:0:ccc::2]:53",        // OPENDNS
+	"[2400:da00::6666]:53",      // 百度
+	"[2001:da8:202:10::36]:53",  // 北京邮电大学 IPv6 DNS 服务器
+	"[2001:da8::666]:53",        // 清华大学 TUNA 协会 IPv6 DNS 服务器
 	"[2606:4700:4700::1111]:53", // cloudflare
-	"[2a02:6b8::feed:0ff]:53", //yandex
+	"[2a02:6b8::feed:0ff]:53",   //yandex
 	"[2001:4860:4860::8888]:53", // Google
-	"[2620:fe::fe]:53", // IBM
+	"[2620:fe::fe]:53",          // IBM
 }
 
-
-func ResolveTxt(host string, nameserver []string) string{
-	if len(nameserver) == 0{
+func ResolveTxt(host string, nameserver []string) string {
+	if len(nameserver) == 0 {
 		return ""
 	}
 
 	ch := make(chan string)
 
-	for i:=range nameserver{
+	for i := range nameserver {
 		go func(server string) {
-			txt := LookupTXT(host,server)
-if len(txt) == 0{
-			println("nameserver ", server, " : ", txt)
-}
+			txt := LookupTXT(host, server)
+			if len(txt) == 0 {
+				println("nameserver ", server, " : ", txt)
+			}
+
 			ch <- txt
 		}(nameserver[i])
 	}
@@ -85,27 +84,26 @@ if len(txt) == 0{
 	total := 1
 
 	for {
-		txt:= <-ch
+		txt := <-ch
 		//if len(txt) > 0 || total>=len(nameserver) {
-		if total>=len(nameserver) {
+		if total >= len(nameserver) {
 			return txt
 		}
 		total++
 	}
 }
 
-
 func main() {
 	//host:="baidu.com"
-	host:="ip4.6du.host"
+	host := "ip4.6du.host"
 
 	wg := sync.WaitGroup{}
 
-	var v6txt,v4txt string
-	run := func(nameserver []string, out *string){
+	var v6txt, v4txt string
+	run := func(nameserver []string, out *string) {
 		wg.Add(1)
 		go func() {
-			*out=ResolveTxt(host, nameserver)
+			*out = ResolveTxt(host, nameserver)
 			wg.Done()
 		}()
 	}
@@ -116,5 +114,5 @@ func main() {
 	wg.Wait()
 	println("v4", v4txt)
 	println("v6", v6txt)
-	time.Sleep(3*time.Second)
+	time.Sleep(3 * time.Second)
 }
