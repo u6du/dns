@@ -101,7 +101,8 @@ func ResolveTxt(host string, nameserver []string, verify func(string) bool) stri
 
 func main() {
 	//host:="baidu.com"
-	host := "ip4.6du.host"
+	//host := "ip4.6du.host"
+	host := "g.cn"
 
 	wg := sync.WaitGroup{}
 
