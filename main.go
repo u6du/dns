@@ -27,7 +27,9 @@ func LookupTXT(nameserver string){
 	}
 	li, err := resolve.LookupTXT(context.Background(), "ip4.6du.host")
 	ex.Panic(err)
-	fmt.Printf("%s %s", nameserver, li)
+	for i := range li {
+		fmt.Printf("%s %s\n\n", nameserver, li[i])
+	}
 }
 
 func main() {
