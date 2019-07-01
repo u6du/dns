@@ -1,4 +1,4 @@
-package main
+package dns
 
 import (
 	"encoding/binary"
@@ -9,8 +9,8 @@ import (
 	"github.com/u6du/go-rfc1924/base85"
 	"golang.org/x/crypto/ed25519"
 
-	"sixdu/config"
-	"sixdu/key"
+	"github.com/u6du/config"
+	"github.com/u6du/key"
 )
 
 const (
@@ -61,7 +61,7 @@ type Resolve struct {
 }
 
 func (r *Resolve) Txt(name, nameserver string, retry int) ([]byte, uint8) {
-	txt := dns.Txt(name, nameserver, retry)
+	txt := Txt(name, nameserver, retry)
 	b, state := Parse(txt)
 	if state == ErrTimeout {
 		if r.timeoutCount < 3 {
