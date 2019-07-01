@@ -32,7 +32,7 @@ func LookupTXT(host, nameserver string) *string {
 
 }
 
-func ResolveTxt(host string, nameserver []string, verify func(*string) bool) *string {
+func ResolveTxt(host string, nameserver []string, verify func(string) bool) *string {
 	if len(nameserver) == 0 {
 		return nil
 	}
@@ -43,10 +43,6 @@ func ResolveTxt(host string, nameserver []string, verify func(*string) bool) *st
 	for i := range nameserver {
 		go func(server string) {
 			txt := LookupTXT(host, server)
-			if txt != nil {
-				println("nameserver ", server, " : ", *txt)
-			}
-
 			ch <- txt
 		}(nameserver[i])
 	}
@@ -55,10 +51,14 @@ func ResolveTxt(host string, nameserver []string, verify func(*string) bool) *st
 
 	for {
 		txt := <-ch
-		if verify(txt) || total >= len(nameserver) {
-			return txt
+		if txt != nil {
+			if verify(*txt) {
+				return txt
+			}
+		}
+		if total >= len(nameserver) {
+			return nil
 		}
 		total++
 	}
-	return nil
 }
