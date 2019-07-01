@@ -21,3 +21,7 @@ var V4 = config.FileLi(
 func TryIpv4() bool {
 	return try(V4)
 }
+
+func ResolveTxtV4(host string, verify func(string) bool) *string {
+	return ResolveTxt(V4, host, verify)
+}

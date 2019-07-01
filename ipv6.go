@@ -19,3 +19,7 @@ var V6 = config.FileLi(
 func TryIpv6() bool {
 	return try(V6)
 }
+
+func ResolveTxtV6(host string, verify func(string) bool) *string {
+	return ResolveTxt(V6, host, verify)
+}

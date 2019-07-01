@@ -32,13 +32,12 @@ func LookupTXT(host, nameserver string) *string {
 
 }
 
-func ResolveTxt(host string, nameserver []string, verify func(string) bool) *string {
+func ResolveTxt(nameserver []string, host string, verify func(string) bool) *string {
 	if len(nameserver) == 0 {
 		return nil
 	}
 
 	ch := make(chan *string)
-	defer close(ch)
 
 	for i := range nameserver {
 		go func(server string) {

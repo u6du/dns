@@ -78,17 +78,6 @@ func DialNew(nameserver string) func(context.Context, string, string) (p2p.Conn,
 	}
 }
 
-var NAMESERVER = []string{
-	"180.76.76.76",
-	"119.29.29.29",
-	"223.5.5.5",
-	"1.1.1.1",
-	"208.67.220.220",
-	"8.8.8.8",
-	"9.9.9.9",
-	"114.114.114.114",
-	"223.6.6.6",
-}
 
 func main() {
 	for _, nameserver := range NAMESERVER {

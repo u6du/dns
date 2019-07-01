@@ -12,6 +12,24 @@ import (
 // 		用 t.cn 测试下是不是支持 ipv6
 
 func TestNet(t *testing.T) {
+
+	host := ".6du.host"
+	v4txt := ResolveTxtV4("ip4"+host, func(s string) bool {
+		t.Log("ip4  ", s)
+		return true
+	})
+
+	if v4txt != nil {
+		t.Log("v4txt ", *v4txt)
+	}
+
+	v6txt := ResolveTxtV6("ip4"+host, func(s string) bool {
+		t.Log("ipv4  ", s)
+		return true
+	})
+	if v6txt != nil {
+		t.Log("v6txt ", *v6txt)
+	}
 	t.Log("ipv6 ", TryIpv6())
 	t.Log("ipv4 ", TryIpv4())
 
