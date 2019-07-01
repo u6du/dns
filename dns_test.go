@@ -13,8 +13,8 @@ import (
 
 func TestNet(t *testing.T) {
 	t.Log("ipv6 ", TryIpv6())
-
 	t.Log("ipv4 ", TryIpv4())
+
 	//host:="baidu.com"
 	//host := "ip4.6du.host"
 	/*
