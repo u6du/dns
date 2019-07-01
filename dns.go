@@ -5,7 +5,7 @@ import (
 	"net"
 )
 
-func LookupTXT(host, nameserver string) string {
+func LookupTXT(host, nameserver string) *string {
 
 	resolve := &net.Resolver{
 		PreferGo: true,
@@ -24,28 +24,28 @@ func LookupTXT(host, nameserver string) string {
 	li, err := resolve.LookupTXT(context.Background(), host)
 	if err == nil {
 		for i := range li {
-			txt := li[i]
-			if len(txt) > 0 {
-				return txt
-			}
+			return &li[i]
 		}
 	}
 
-	return ""
+	return nil
 
 }
 
-func ResolveTxt(host string, nameserver []string, verify func(string) bool) string {
+func ResolveTxt(host string, nameserver []string, verify func(*string) bool) *string {
 	if len(nameserver) == 0 {
-		return ""
+		return nil
 	}
 
-	ch := make(chan string)
+	ch := make(chan *string)
+	defer close(ch)
 
 	for i := range nameserver {
 		go func(server string) {
 			txt := LookupTXT(host, server)
-			println("nameserver ", server, " : ", txt)
+			if txt != nil {
+				println("nameserver ", server, " : ", *txt)
+			}
 
 			ch <- txt
 		}(nameserver[i])
@@ -60,4 +60,5 @@ func ResolveTxt(host string, nameserver []string, verify func(string) bool) stri
 		}
 		total++
 	}
+	return nil
 }

@@ -11,9 +11,10 @@ import (
 // 		用DOT找DOT找的时候容忍超时
 // 		用 t.cn 测试下是不是支持 ipv6
 
-func TestTxt(t *testing.T) {
+func TestNet(t *testing.T) {
+	t.Log("ipv6 ", TryIpv6())
 
-	t.Log("ipv4 ", Ipv4)
+	t.Log("ipv4 ", TryIpv4())
 	//host:="baidu.com"
 	//host := "ip4.6du.host"
 	/*

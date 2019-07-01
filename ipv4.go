@@ -2,7 +2,7 @@ package dns
 
 import "github.com/u6du/config"
 
-var Ipv4 = config.FileLi(
+var V4 = config.FileLi(
 	"dns/ipv4",
 	[]string{
 		"180.76.76.76:53",      // 百度
@@ -17,3 +17,7 @@ var Ipv4 = config.FileLi(
 		"114.114.114.114:53",   // 114 dns
 		"176.103.130.130:5353", // AdGuard DNS
 	})
+
+func TryIpv4() bool {
+	return try(V4)
+}
