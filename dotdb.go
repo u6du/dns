@@ -3,10 +3,8 @@ package dns
 import (
 	"time"
 
-	"github.com/u6du/ex"
-	"github.com/u6du/zerolog/log"
-
 	"github.com/u6du/config"
+	"github.com/u6du/ex"
 )
 
 func DotTxt(name string, verify func(string) bool) *string {
@@ -55,7 +53,6 @@ CREATE INDEX "dot.delay" ON "dot" ("delay" ASC);`,
 
 	for c.Next() {
 		c.Scan(&id, &nameserver)
-		log.Debug().Msg(nameserver)
 		start := time.Now()
 
 		txt := DotLookupTxt(name, nameserver, 2)
