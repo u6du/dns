@@ -17,8 +17,8 @@ func (d *Dns) TxtTest(host string) bool {
 	return txt != nil
 }
 
-var DNS = map[uint8]Dns{
-	4: Dns{config.File.Li(
+var DNS = map[uint8]*Dns{
+	4: &Dns{config.File.Li(
 		"dns/ipv4",
 		[]string{
 			"180.76.76.76:53",      // 百度
@@ -34,7 +34,7 @@ var DNS = map[uint8]Dns{
 			"176.103.130.130:5353", // AdGuard DNS
 		})},
 
-	6: Dns{config.File.Li(
+	6: &Dns{config.File.Li(
 		"dns/ipv6",
 		[]string{
 			"[2a00:5a60::ad1:0ff]:5353", // AdGuard DNS
