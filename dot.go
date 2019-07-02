@@ -6,7 +6,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/rs/zerolog/log"
+	"github.com/u6du/zerolog/log"
 )
 
 func NewResolver(addr string) *net.Resolver {

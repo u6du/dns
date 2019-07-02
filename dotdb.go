@@ -1,60 +1,13 @@
 package dns
 
 import (
-	"encoding/binary"
 	"time"
 
-	"github.com/rs/zerolog/log"
+	"github.com/u6du/zerolog/log"
 	"github.com/u6du/ex"
-	"github.com/u6du/go-rfc1924/base85"
-	"golang.org/x/crypto/ed25519"
 
 	"github.com/u6du/config"
-	key "github.com/u6du/key/ed25519"
 )
-
-const (
-	Success uint8 = iota
-	ErrVerify
-	ErrTimeout
-	ErrDecode
-	ErrEmpty
-)
-
-const TimeOutHour = uint32(8)
-
-func Decode(txt string) ([]byte, error) {
-	b, err := base85.DecodeString(txt)
-	return b, err
-}
-
-func Parse(txt string) ([]byte, uint8) {
-	if len(txt) > ed25519.SignatureSize {
-		b, err := Decode(txt)
-		if err != nil {
-			return []byte{}, ErrDecode
-		}
-		n := ed25519.SignatureSize
-		ctx := b[n:]
-		sign := b[:n]
-		if ed25519.Verify(key.GodPublic, ctx, sign) {
-
-			hour := ctx[0:4]
-			ctx := ctx[4:]
-
-			cost := uint32(time.Now().Unix()/3600) - binary.LittleEndian.Uint32(hour)
-			if cost >= TimeOutHour {
-				return ctx, ErrTimeout
-			} else {
-				return ctx, Success
-			}
-
-		} else {
-			return []byte{}, ErrVerify
-		}
-	}
-	return []byte{}, ErrEmpty
-}
 
 type Resolve struct {
 	timeoutCount uint8
