@@ -5,6 +5,7 @@ import (
 
 	"github.com/u6du/config"
 	"github.com/u6du/ex"
+	"github.com/u6du/zerolog/info"
 )
 
 func DotTxt(name string, verify func(string) bool) *string {
@@ -34,8 +35,6 @@ CREATE INDEX "dot.delay" ON "dot" ("delay" ASC);`,
 		"dns.brahma.world",
 	)
 
-	defer db.Close()
-
 	c, err := db.Query("select id,host from dot order by delay asc")
 
 	ex.Panic(err)
@@ -45,6 +44,8 @@ CREATE INDEX "dot.delay" ON "dot" ("delay" ASC);`,
 	var costIdLi [][2]uint
 
 	defer func() {
+		defer db.Close()
+
 		for _, costId := range costIdLi {
 			_, err := db.Exec("UPDATE dot SET delay=? WHERE id=?", costId[0], costId[1])
 			ex.Panic(err)
@@ -53,6 +54,7 @@ CREATE INDEX "dot.delay" ON "dot" ("delay" ASC);`,
 
 	for c.Next() {
 		c.Scan(&id, &nameserver)
+		info.Uint("id", id).Str("nameserver", nameserver).End()
 		start := time.Now()
 
 		txt := DotLookupTxt(name, nameserver, 2)
