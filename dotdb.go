@@ -5,7 +5,6 @@ import (
 
 	"github.com/u6du/config"
 	"github.com/u6du/ex"
-	"github.com/u6du/zerolog/info"
 )
 
 func DotTxt(name string, verify func(string) bool) *string {
@@ -54,7 +53,7 @@ CREATE INDEX "dot.delay" ON "dot" ("delay" ASC);`,
 
 	for c.Next() {
 		c.Scan(&id, &nameserver)
-		info.Uint("id", id).Str("nameserver", nameserver).End()
+
 		start := time.Now()
 
 		txt := DotLookupTxt(name, nameserver, 2)
@@ -64,12 +63,12 @@ CREATE INDEX "dot.delay" ON "dot" ("delay" ASC);`,
 		var verified bool
 
 		if txt == nil {
-			cost += 10000
+			cost += 20000
 			verified = false
 		} else {
 			verified = verify(*txt)
 			if !verified {
-				cost += 5000
+				cost += 10000
 			}
 		}
 		costIdLi = append(costIdLi, [2]uint{cost, id})
