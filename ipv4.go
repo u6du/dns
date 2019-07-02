@@ -2,7 +2,7 @@ package dns
 
 import "github.com/u6du/config"
 
-var V4 = config.FileLi(
+var V4 = config.File.Li(
 	"dns/ipv4",
 	[]string{
 		"180.76.76.76:53",      // 百度

@@ -2,7 +2,7 @@ package dns
 
 import "github.com/u6du/config"
 
-var V6 = config.FileLi(
+var V6 = config.File.Li(
 	"dns/ipv6",
 	[]string{
 		"[2a00:5a60::ad1:0ff]:5353", // AdGuard DNS

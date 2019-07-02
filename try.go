@@ -5,8 +5,5 @@ func try(nameserver []string) bool {
 	txt := ResolveTxt(nameserver, HostTestTxt, func(txt string) bool {
 		return true
 	})
-	if txt != nil {
-		return true
-	}
-
+	return txt != nil
 }

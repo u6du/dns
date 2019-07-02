@@ -10,7 +10,7 @@ import (
 	"golang.org/x/crypto/ed25519"
 
 	"github.com/u6du/config"
-	"github.com/u6du/key"
+	key "github.com/u6du/key/ed25519"
 )
 
 const (
