@@ -4,6 +4,8 @@ package dns
 
 import (
 	"testing"
+
+	"github.com/u6du/config"
 )
 
 // TODO 先用UDP DNS找
@@ -11,10 +13,13 @@ import (
 // 		用DOT找DOT找的时候容忍超时
 // 		用 t.cn 测试下是不是支持 ipv6
 
-func TestNet(t *testing.T) {
+var HostBootDefault = "6du.host"
 
-	host := ".6du.host"
-	v4txt := ResolveTxtV4("ip4"+host, func(s string) bool {
+func TestNet(t *testing.T) {
+	hostPath := "dns/host/boot/"
+
+	v4host := config.File.OneLine(hostPath+"4", "ip4."+HostBootDefault)
+	v4txt := ResolveTxtV4(v4host, func(s string) bool {
 		t.Log("ip4  ", s)
 		return true
 	})
@@ -22,8 +27,8 @@ func TestNet(t *testing.T) {
 	if v4txt != nil {
 		t.Log("v4txt ", *v4txt)
 	}
-
-	v6txt := ResolveTxtV6("ip4"+host, func(s string) bool {
+	v6host := config.File.OneLine(hostPath+"6", "ip6."+HostBootDefault)
+	v6txt := ResolveTxtV6(v6host, func(s string) bool {
 		t.Log("ipv4  ", s)
 		return true
 	})
