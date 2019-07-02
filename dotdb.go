@@ -3,37 +3,13 @@ package dns
 import (
 	"time"
 
-	"github.com/u6du/zerolog/log"
 	"github.com/u6du/ex"
+	"github.com/u6du/zerolog/log"
 
 	"github.com/u6du/config"
 )
 
-type Resolve struct {
-	timeoutCount uint8
-}
-
-func (r *Resolve) Txt(name, nameserver string, retry int) ([]byte, uint8) {
-	txt := Txt(name, nameserver, retry)
-	b, state := Parse(txt)
-	if state == ErrTimeout {
-		if r.timeoutCount < 3 {
-			r.timeoutCount += 1
-		} else {
-			return b, Success
-		}
-	}
-	return b, state
-}
-
-func BootNode(name string) []byte {
-	resolve := Resolve{}
-
-	b, state := resolve.Txt(name, "", 1)
-	if state == Success {
-		return b
-	}
-
+func DotTxt(name string, verify func(string) bool) *string {
 	db := config.Db(
 		"dns/dot",
 
@@ -82,21 +58,27 @@ CREATE INDEX "dot.delay" ON "dot" ("delay" ASC);`,
 		log.Debug().Msg(nameserver)
 		start := time.Now()
 
-		b, state = resolve.Txt(name, nameserver, 2)
+		txt := DotLookupTxt(name, nameserver, 2)
 
 		cost := uint(time.Since(start).Nanoseconds() / 1000000)
 
-		success := state == Success
+		var verified bool
 
-		if !success {
-			cost += 99999
+		if txt == nil {
+			cost += 10000
+			verified = false
+		} else {
+			verified = verify(*txt)
+			if !verified {
+				cost += 5000
+			}
 		}
 		costIdLi = append(costIdLi, [2]uint{cost, id})
 
-		if success {
+		if verified {
 			c.Close()
-			return b
+			return txt
 		}
 	}
-	return []byte{}
+	return nil
 }

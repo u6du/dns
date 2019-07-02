@@ -9,7 +9,7 @@ import (
 	"github.com/u6du/zerolog/log"
 )
 
-func NewResolver(addr string) *net.Resolver {
+func NewDotResolver(addr string) *net.Resolver {
 	var dialer net.Dialer
 	tlsConfig := &tls.Config{
 		ServerName:         addr,
@@ -33,15 +33,11 @@ func NewResolver(addr string) *net.Resolver {
 
 }
 
-func Txt(name, nameserver string, retry int) string {
+func DotLookupTxt(name, nameserver string, retry int) *string {
 
 	var resolve *net.Resolver
 
-	if len(nameserver) > 0 {
-		resolve = NewResolver(nameserver)
-	} else {
-		resolve = net.DefaultResolver
-	}
+	resolve = NewDotResolver(nameserver)
 
 	n := 1
 
@@ -58,10 +54,10 @@ func Txt(name, nameserver string, retry int) string {
 		}
 
 		for i := range li {
-			return li[i]
+			return &li[i]
 		}
 	}
-	return ""
+	return nil
 }
 
 /*
