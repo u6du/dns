@@ -13,7 +13,6 @@ func LookupTXT(host, nameserver string) *string {
 			var dialer net.Dialer
 
 			conn, err := dialer.DialContext(context, "udp", nameserver)
-
 			if err != nil {
 				return nil, err
 			}
