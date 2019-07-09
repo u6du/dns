@@ -2,10 +2,10 @@ github.com/coreos/go-systemd v0.0.0-20190620071333-e64a0ec8b42a/go.mod h1:F5haX7
 github.com/mattn/go-sqlite3 v1.10.0 h1:jbhqpg7tQe4SupckyijYiy0mJJ/pRyHvXf7JdWK860o=
 github.com/mattn/go-sqlite3 v1.10.0/go.mod h1:FPy6KqzDD04eiIsT53CuJW3U88zkxoIYsOqkbpncsNc=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
-github.com/u6du/config v0.0.0-20190704044722-2b75d4b4eb6c h1:koTZcQ2gCRPIlX2XbmDiyM/g4OKgLXsEa0VZk/COmCA=
-github.com/u6du/config v0.0.0-20190704044722-2b75d4b4eb6c/go.mod h1:96Z905IIUgltAZue++VnsfgksA/sTOn9CMVrDii2lZQ=
-github.com/u6du/ex v0.0.0-20190628070729-e33da411a5b7 h1:1Mibry3Jp90csiFMG2dQD9KDXaTxBuGv8v3tZEpAoNQ=
-github.com/u6du/ex v0.0.0-20190628070729-e33da411a5b7/go.mod h1:CGUxsNSyVgthQqL/OI+U/Zyj7MyXySjWT2ySxXMZTbQ=
+github.com/u6du/config v0.0.0-20190709031600-ab9eb7012fa0 h1:eK85ZZmhUeCb2nyCqb3NVb5m8+tv5ASIdFmFap2ibHg=
+github.com/u6du/config v0.0.0-20190709031600-ab9eb7012fa0/go.mod h1:iKjaXJF4OwNb+9zuSNMLbShmetmKKP+88ys6NRBIqHE=
+github.com/u6du/ex v0.0.0-20190708091349-7d5ee96fde5a h1:/BgwFEWUtY9c7ii32v4xiYHbzTLfg58a/j5xqs2V05I=
+github.com/u6du/ex v0.0.0-20190708091349-7d5ee96fde5a/go.mod h1:KRvfZv1cFzDI1DqNO3QNa8AHNDDRtfIypbblsF8mCdg=
 github.com/u6du/zerolog v1.15.6 h1:90Oe1sklUEY/CXZMuSkkAe7oSQo/R8P1GeQE8iFpDeM=
 github.com/u6du/zerolog v1.15.6/go.mod h1:3hKLkFf0N4kVAQIRWo0LfTpNQo7eQ3nRwcoUPLBen00=
 github.com/zenazn/goji v0.9.0/go.mod h1:7S9M489iMyHBNxwZnk9/EHS098H4/F6TATF2mIxtB1Q=
