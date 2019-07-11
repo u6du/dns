@@ -35,7 +35,7 @@ CREATE INDEX "dot.delay" ON "dot" ("delay" ASC);`,
 
 func DotTxt(name string, verify func(string) bool) (txt *string) {
 
-	Db.WithConn(func(db *sql.DB) {
+	Db.With(func(db *sql.DB) {
 
 		c, err := db.Query("select id,host from dot order by delay asc")
 		ex.Panic(err)
