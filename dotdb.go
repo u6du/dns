@@ -1,9 +1,11 @@
 package dns
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/u6du/db"
+	"github.com/u6du/ex"
 )
 
 var Db = db.Db(
@@ -32,47 +34,50 @@ CREATE INDEX "dot.delay" ON "dot" ("delay" ASC);`,
 	"dns.brahma.world",
 )
 
-func DotTxt(name string, verify func(string) bool) *string {
+func DotTxt(name string, verify func(string) bool) (txt *string) {
 
-	c := Db.Query("select id,host from dot order by delay asc")
-	defer c.Close()
+	Db.WithConn(func(db *sql.DB) {
 
-	var id uint
-	var nameserver string
-	var costIdLi [][2]uint
+		c, err := db.Query("select id,host from dot order by delay asc")
+		ex.Panic(err)
+		var id uint
+		var nameserver string
+		var costIdLi [][2]uint
 
-	defer func() {
-		for _, costId := range costIdLi {
-			Db.Exec("UPDATE dot SET delay=? WHERE id=?", costId[0], costId[1])
-		}
-	}()
+		defer func() {
+			for _, costId := range costIdLi {
+				_, err = db.Exec("UPDATE dot SET delay=? WHERE id=?", costId[0], costId[1])
+				ex.Warn(err)
+			}
+		}()
 
-	for c.Next() {
-		c.Scan(&id, &nameserver)
+		for c.Next() {
+			ex.Warn(c.Scan(&id, &nameserver))
 
-		start := time.Now()
+			start := time.Now()
 
-		txt := DotLookupTxt(name, nameserver, 2)
+			txt = DotLookupTxt(name, nameserver, 2)
 
-		cost := uint(time.Since(start).Nanoseconds() / 1000000)
+			cost := uint(time.Since(start).Nanoseconds() / 1000000)
 
-		var verified bool
+			var verified bool
 
-		if txt == nil {
-			cost += 20000
-			verified = false
-		} else {
-			verified = verify(*txt)
-			if !verified {
-				cost += 10000
+			if txt == nil {
+				cost += 20000
+				verified = false
+			} else {
+				verified = verify(*txt)
+				if !verified {
+					cost += 10000
+				}
+			}
+			costIdLi = append(costIdLi, [2]uint{cost, id})
+
+			if verified {
+				ex.Close(c)
+				return
 			}
 		}
-		costIdLi = append(costIdLi, [2]uint{cost, id})
-
-		if verified {
-			c.Close()
-			return txt
-		}
-	}
-	return nil
+	})
+	return txt
 }

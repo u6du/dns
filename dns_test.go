@@ -7,5 +7,8 @@ import (
 )
 
 func TestNet(t *testing.T) {
-
+	DotTxt("6.ip.6du.host", func(s string) bool {
+		t.Log(s)
+		return false
+	})
 }
