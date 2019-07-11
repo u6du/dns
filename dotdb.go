@@ -33,6 +33,7 @@ CREATE INDEX "dot.delay" ON "dot" ("delay" ASC);`,
 		"1dot1dot1dot1.cloudflare-dns.com",
 		"dns.brahma.world",
 	)
+	defer db.Close()
 
 	c, err := db.Query("select id,host from dot order by delay asc")
 
@@ -43,8 +44,6 @@ CREATE INDEX "dot.delay" ON "dot" ("delay" ASC);`,
 	var costIdLi [][2]uint
 
 	defer func() {
-		defer db.Close()
-
 		for _, costId := range costIdLi {
 			_, err := db.Exec("UPDATE dot SET delay=? WHERE id=?", costId[0], costId[1])
 			ex.Panic(err)
